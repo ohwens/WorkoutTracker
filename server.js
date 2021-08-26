@@ -8,6 +8,8 @@ const db = require("./models");
 
 const app = express();
 
+app.use(express.static("public"));
+
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
@@ -19,6 +21,9 @@ mongoose.connect(process.env.MONGODB_URI || "mongodb://localhost/workout", {
   useFindAndModify: false
   }
 );
+
+// api route
+app.use("/api/", require('./routes/api'));
 
 // html routes
 app.get("/exercise", (req, res) => {
@@ -32,6 +37,7 @@ app.get("/stats", (req, res) => {
 app.get("/", (req, res) => {
   res.sendFile(path.join(__dirname, "./public/index.html"));
 });
+
 
 app.listen(PORT, () => {
   console.log(`App running on port ${PORT}!`);
